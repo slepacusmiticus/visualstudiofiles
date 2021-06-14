@@ -1,0 +1,53 @@
+<ContentNavigationDrawer>:
+    ScrollView:
+        MDList:
+            OneLineListItem:
+                text: "Screen_1"
+                on_press:
+                    root.nav_drawer.set_state("close")
+                    root.screen_manager.current = "scr 1"
+            OneLineListItem:
+                text: "Screen_2"
+                on_press:
+                    root.nav_drawer.set_state("close")
+                    root.screen_manager.current = "scr 2"
+
+
+Screen:
+
+    MDNavigationLayout:
+
+        ScreenManager:
+
+            Screen:
+
+                MDBottomAppBar:
+                    orientation: 'vertical'
+
+                    MDToolbar:
+                        title: "Navigation Drawer"
+                        icon: "git"
+                        type: "bottom"
+                        elevation: 10
+                        left_action_items: [['menu', lambda x: nav_drawer.set_state("open")]]
+
+                    Widget:
+
+
+        MDNavigationDrawer:
+            id: nav_drawer
+
+            ContentNavigationDrawer
+
+#    MDBoxLayout:
+#
+#        # Will always be at the bottom of the screen.
+#        MDBottomAppBar:
+#
+#            MDToolbar:
+#                title: "Title"
+#                icon: "git"
+#                type: "bottom"
+#                #left_action_items: [["menu", lambda x: x]]
+#                left_action_items: [['menu', lambda x: nav_drawer.set_state("open")]]
+#
