@@ -1,6 +1,6 @@
 import pygame, sys
 import random
-
+import os
 
 
 class Settings:
@@ -14,6 +14,10 @@ class Settings:
         self.blue = (0,0,255)
         self.green = (0,255,0)
 
+        self.game_folder = os.path.dirname(__file__)
+        self.img_folder = os.path.join(self.game_folder, "img")
+
+
 class Player(pygame.sprite.Sprite):
     
     # sprite for player
@@ -24,7 +28,7 @@ class Player(pygame.sprite.Sprite):
         self.image = pygame.Surface((50,50))
         self.image.fill(stt.green)
         self.rect = self.image.get_rect() 
-        self.rect.center = ((stt.WIDTH)/2, stt.HEIGHT/2)
+        self.rect.center = (stt.WIDTH/2, stt.HEIGHT/2)
     
     def update(self):
         
