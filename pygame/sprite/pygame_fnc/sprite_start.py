@@ -2,8 +2,6 @@ import pygame, sys
 import random
 
 
-
-
 def game():
     WIDTH = 360
     HEIGHT = 480

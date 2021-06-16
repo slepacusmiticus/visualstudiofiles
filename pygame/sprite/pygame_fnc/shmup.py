@@ -22,14 +22,16 @@ class Player(pygame.sprite.Sprite):
         
         self.stt=stt
         self.image = pygame.Surface((50,50))
-        self.image.fill(stt.green)
+        self.image.fill(stt.GREEN)
         self.rect = self.image.get_rect() 
         self.rect.center = (stt.WIDTH/2, stt.HEIGHT/2)
 
+    def update():
+        pass
+
 
 def game():
-
-    
+        
     pygame.init()
     #pygame.mixer.init()
     stt=Settings()
@@ -40,20 +42,21 @@ def game():
     all_sprites = pygame.sprite.Group()
     player = Player(stt)
     all_sprites.add(player)
-    
     game_is_running = True
+
     while game_is_running:
         clock.tick(stt.FPS)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 game_is_running = False
                 
-        all_sprites.update()
+        
         screen.fill(stt.BLUE)
         all_sprites.draw(screen)
         pygame.display.flip()
     pygame.quit()
     sys.exit()
+
 
 if __name__ == '__main__':
     game()
