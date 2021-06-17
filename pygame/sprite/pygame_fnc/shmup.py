@@ -33,6 +33,8 @@ class Player(pygame.sprite.Sprite):
         self.image  = (pygame.transform.scale(player_img, (50,38))).convert()
         self.image.set_colorkey(stt.BLACK)
         self.rect = self.image.get_rect() 
+        self.radius=20
+        # pygame.draw.circle(self.image, stt.RED,self.rect.center,self.radius)
         self.rect.centerx = stt.WIDTH/2
         self.rect.bottom = stt.HEIGHT -10
         self.speedx = 0
@@ -67,6 +69,8 @@ class Mob(pygame.sprite.Sprite):
         self.image  = (pygame.transform.scale(meteor_img, (25,25))).convert()
         self.image.set_colorkey(stt.BLACK)
         self.rect = self.image.get_rect()
+        self.radius=(self.rect.width*.85/2)
+        # pygame.draw.circle(self.image, stt.RED,self.rect.center,self.radius)
         self.rect.x = random.randrange(0,self.stt.WIDTH - self.rect.width)
         self.rect.y = random.randrange(-100,-40)
         self.speedy = random.randrange(1,8)
@@ -152,7 +156,7 @@ def game():
             all_sprites.add(m)
             mobs.add(m)
  
-        hits=pygame.sprite.spritecollide(player, mobs, False)
+        hits=pygame.sprite.spritecollide(player, mobs, False, pygame.sprite.collide_circle)
         if hits:
             game_is_running = False
        
