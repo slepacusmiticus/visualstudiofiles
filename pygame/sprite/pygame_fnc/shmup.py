@@ -1,6 +1,6 @@
 import pygame, sys
 import random
-
+from os import path
 from pygame.constants import K_LEFT, K_RIGHT
 
 
@@ -18,22 +18,27 @@ class Settings:
         self.RED = (255,0,0)
         self.YELLOW =(255,255,0)
 
+        self.img_dir = path.join(path.dirname(__file__), "img")
+
+       
+        
+
 class Player(pygame.sprite.Sprite):
     
     # sprite for player
-    def __init__(self,stt, all_sprites, bullets):
+    def __init__(self,stt, bullet_img,all_sprites, bullets,player_img):
         pygame.sprite.Sprite.__init__(self)
-        
+        self.bullet_img= bullet_img
         self.stt = stt
-        self.image = pygame.Surface((50,40))
-        self.image.fill(stt.GREEN)
+        self.image  = (pygame.transform.scale(player_img, (50,38))).convert()
+        self.image.set_colorkey(stt.BLACK)
         self.rect = self.image.get_rect() 
         self.rect.centerx = stt.WIDTH/2
         self.rect.bottom = stt.HEIGHT -10
         self.speedx = 0
     
-    def shoot(self,stt,all_sprites,bullets):
-        bullet = Bullet(stt, self.rect.centerx, self.rect.top)
+    def shoot(self,stt,bullet_img, all_sprites,bullets):
+        bullet = Bullet(stt, bullet_img,self.rect.centerx, self.rect.top)
         all_sprites.add(bullet)
         bullets.add(bullet)
 
@@ -56,11 +61,11 @@ class Player(pygame.sprite.Sprite):
 
 class Mob(pygame.sprite.Sprite):
 
-    def __init__(self,stt) -> None:
+    def __init__(self,stt,meteor_img) -> None:
         pygame.sprite.Sprite.__init__(self)
         self.stt = stt
-        self.image = pygame.Surface((30,40))
-        self.image.fill(stt.RED)
+        self.image  = (pygame.transform.scale(meteor_img, (25,25))).convert()
+        self.image.set_colorkey(stt.BLACK)
         self.rect = self.image.get_rect()
         self.rect.x = random.randrange(0,self.stt.WIDTH - self.rect.width)
         self.rect.y = random.randrange(-100,-40)
@@ -78,11 +83,11 @@ class Mob(pygame.sprite.Sprite):
 
 class Bullet(pygame.sprite.Sprite):
 
-    def __init__(self,stt,x,y) -> None:
+    def __init__(self,stt,bullet_img,x,y) -> None:
         pygame.sprite.Sprite.__init__(self)
         self.stt = stt
-        self.image = pygame.Surface((10,20))
-        self.image.fill(stt.YELLOW)
+        self.image  = (pygame.transform.scale(bullet_img, (5,35))).convert()
+        self.image.set_colorkey(stt.BLACK)
         self.rect = self.image.get_rect()
         self.rect.bottom = y
         self.rect.centerx=x
@@ -95,7 +100,6 @@ class Bullet(pygame.sprite.Sprite):
             self.kill() 
 
 
-
 def game():
         
     pygame.init()
@@ -105,14 +109,23 @@ def game():
     pygame.display.set_caption('My game')
     clock = pygame.time.Clock()
 
+    # load images
+    background = pygame.image.load(path.join(stt.img_dir, "stars.png")).convert()
+    background_rect= background.get_rect()
+    player_img = pygame.image.load(path.join(stt.img_dir,"playerShip1_orange.png"))
+    print(player_img)
+    meteor_img = pygame.image.load(path.join(stt.img_dir,"meteorBrown_med1.png"))
+    bullet_img = pygame.image.load(path.join(stt.img_dir,"laserRed16.png"))
+
+    
     all_sprites = pygame.sprite.Group()
     mobs= pygame.sprite.Group()
     bullets = pygame.sprite.Group()
-    player = Player(stt,all_sprites,bullets)
+    player = Player(stt,bullet_img, all_sprites,bullets,player_img)
     all_sprites.add(player)
     
     for i in range(8):
-        m=Mob(stt)
+        m=Mob(stt,meteor_img)
         all_sprites.add(m)
         mobs.add(m)
 
@@ -130,12 +143,12 @@ def game():
                 game_is_running = False
             elif event.type == pygame.KEYDOWN:
                 if event.key ==pygame.K_SPACE:
-                    player.shoot(stt,all_sprites, bullets)
+                    player.shoot(stt,bullet_img,all_sprites, bullets)
         
-        all_sprites.update()
+        all_sprites.update() 
         hits = pygame.sprite.groupcollide(mobs, bullets,True, True) # dokill1, dokill2, collided = None)
         for hit in hits:
-            m=Mob(stt)
+            m=Mob(stt,meteor_img)
             all_sprites.add(m)
             mobs.add(m)
  
@@ -144,6 +157,7 @@ def game():
             game_is_running = False
        
         screen.fill(stt.BLACK)
+        screen.blit(background, background_rect)
         all_sprites.draw(screen)
         pygame.display.flip()
     pygame.quit()
