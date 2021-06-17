@@ -15,6 +15,7 @@ class Settings:
         self.BLACK =(0,0,0)
         self.BLUE = (0,0,255)
         self.GREEN = (0,255,0)
+        self.RED = (255,0,0)
 
 class Player(pygame.sprite.Sprite):
     
@@ -32,18 +33,39 @@ class Player(pygame.sprite.Sprite):
 
 
     def update(self):
-        # self.speedx=0
-        # keystate = pygame.key.get_pressed()
-        # #print(keystate)
-        # if keystate[pygame.K_LEFT]:
-        #     print('left')
-        #     self.speedx = -5
-        # if keystate[pygame.K_RIGHT]:
-        #     print('right')
-        #     self.speedx = 5
+        self.speedx=0
+        keystate = pygame.key.get_pressed()
+        
+        if keystate[pygame.K_LEFT]:
+            self.speedx = -8
+        if keystate[pygame.K_RIGHT]:
+            self.speedx = 8
         
         self.rect.x += self.speedx
-        #pass
+        if self.rect.right > self.stt.WIDTH:
+            self.rect.right = self.stt.WIDTH
+        if self.rect.left < 0:
+            self.rect.left = 0
+
+
+class Mob(pygame.sprite.Sprite):
+
+    def __init__(self,stt) -> None:
+        pygame.sprite.Sprite.__init__(self)
+        self.stt=stt
+        self.image = pygame.Surface((30,40))
+        self.image.fill(stt.RED)
+        self.rect = self.image.get_rect()
+        self.rect.x=random.randrange(0,self.stt.WIDTH - self.rect.width)
+        self.rect.y = random.randrange(-100,-40)
+        self.speedy = random.randrange(1,8)
+
+    def update(self):
+        self.rect.y += self.speedy
+        if self.rect.top > self.stt.HEIGHT +10:
+            self.rect.x=random.randrange(0,self.stt.WIDTH - self.rect.width)
+            self.rect.y = random.randrange(-100,-40)
+            self.speedy = random.randrange(1,8)
 
 def game():
         
@@ -55,11 +77,19 @@ def game():
     clock = pygame.time.Clock()
 
     all_sprites = pygame.sprite.Group()
+    mobs= pygame.sprite.Group()
     player = Player(stt)
     all_sprites.add(player)
+    
+    for i in range(8):
+        m=Mob(stt)
+        all_sprites.add(m)
+        mobs.add(m)
+
+
+    # game loop
     game_is_running = True
 
-    #game loop
     while game_is_running:
         clock.tick(stt.FPS)
         
@@ -69,24 +99,7 @@ def game():
             if event.type == pygame.QUIT:
                 game_is_running = False
             
-            # elif event.type == pygame.KEYDOWN :
-            #     if event.key ==pygame.K_LEFT:
-            #         player.speedx -= 5
-            #         print('left')
         
-            #     if event.key ==pygame.K_RIGHT:
-            #         player.speedx += 5  
-            #         print('right')
-            
-            # elif event.type == pygame.KEYUP :
-            #     if event.key ==pygame.K_LEFT:
-            #         player.speedx = 0
-            #         print('left')
-        
-            #     if event.key ==pygame.K_RIGHT:
-            #         player.speedx = 0  
-            #         print('right')
-                
         all_sprites.update()
        
         screen.fill(stt.BLACK)
