@@ -19,6 +19,8 @@ class Settings:
         self.YELLOW =(255,255,0)
 
         self.img_dir = path.join(path.dirname(__file__), "img")
+        self.snd_dir = path.join(path.dirname(__file__), "snd")
+        
         self.font_name =pygame.font.match_font('arial')
 
        
@@ -40,10 +42,11 @@ class Player(pygame.sprite.Sprite):
         self.rect.bottom = stt.HEIGHT -10
         self.speedx = 0
     
-    def shoot(self,stt,bullet_img, all_sprites,bullets):
+    def shoot(self,stt,bullet_img, all_sprites,bullets,shoot_sound):
         bullet = Bullet(stt, bullet_img,self.rect.centerx, self.rect.top)
         all_sprites.add(bullet)
         bullets.add(bullet)
+        shoot_sound.play()
 
 
     def update(self):
@@ -134,7 +137,7 @@ def draw_text(surf, text, size,x,y):
 def game():
         
     pygame.init()
-    #pygame.mixer.init()
+    pygame.mixer.init()
     stt=Settings()
     screen = pygame.display.set_mode((stt.WIDTH, stt.HEIGHT))
     pygame.display.set_caption('My game')
@@ -154,7 +157,21 @@ def game():
     for img in meteor_list:
         print('\nXXX',path.join(stt.img_dir,img))
         meteor_img.append(pygame.image.load(path.join(stt.img_dir, img)).convert())
-        
+
+    #load all game sounds
+    shoot_sound = pygame.mixer.Sound(path.join(stt.snd_dir, "laser9.wav"))
+    pygame.mixer.Sound.set_volume(shoot_sound, 0.3)
+
+    expl_sounds =[]
+    for snd in ['rock_breaking.flac', 'expl.wav']:
+        expl_sounds.append(pygame.mixer.Sound(path.join(stt.snd_dir, snd)))
+        #pygame.mixer.Sound.set_volume(expl_sounds[0:], 0.3)
+    for sound in expl_sounds:
+        sound.set_volume(0.2)
+
+    pygame.mixer.music.load(path.join(stt.snd_dir, 'bkg.wav'))
+    pygame.mixer.music.set_volume(0.3)
+
     all_sprites = pygame.sprite.Group()
     mobs= pygame.sprite.Group()
     bullets = pygame.sprite.Group()
@@ -168,6 +185,7 @@ def game():
 
 
     score=0
+    pygame.mixer.music.play(loops=-1)
 
     # game loop
     game_is_running = True
@@ -177,20 +195,23 @@ def game():
         #input events
         player.speedx=0
         for event in pygame.event.get():
-            if event.type == pygame.QUIT:
+            if event.type == pygame.QUIT: 
                 game_is_running = False
             elif event.type == pygame.KEYDOWN:
                 if event.key ==pygame.K_SPACE:
-                    player.shoot(stt,bullet_img,all_sprites, bullets)
+                    player.shoot(stt,bullet_img,all_sprites, bullets,shoot_sound)
         
         all_sprites.update() 
         hits = pygame.sprite.groupcollide(mobs, bullets,True, True) # dokill1, dokill2, collided = None)
         for hit in hits: 
             score += abs(50 - (int(hit.radius))) 
+            random.choice(expl_sounds).play()
+           
+  
             m=Mob(stt,meteor_img)  
             all_sprites.add(m)
             mobs.add(m)
-  
+    
  
         hits=pygame.sprite.spritecollide(player, mobs, False, pygame.sprite.collide_circle)
         if hits:
