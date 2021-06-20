@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="772085ac-64f5-476a-9ef3-07561449f693" name="Default Changelist" comment="first">
-      <change beforePath="$PROJECT_DIR$/tasker/tasker.kv" beforeDir="false" afterPath="$PROJECT_DIR$/tasker/tasker.kv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tasker/tasker.py" beforeDir="false" afterPath="$PROJECT_DIR$/tasker/tasker.py" afterDir="false" />
+    <list default="true" id="772085ac-64f5-476a-9ef3-07561449f693" name="Default Changelist" comment="asd">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -43,13 +42,14 @@
   </component>
   <component name="PropertiesComponent">
     <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
+    <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../atomProjects/kivy_proj/first.py" />
     <property name="restartRequiresConfirmation" value="false" />
     <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
   </component>
-  <component name="RunManager" selected="Python.yumny">
+  <component name="RunManager" selected="Python.shmup">
     <configuration name="ddd" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="visualstudiofiles" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -92,19 +92,19 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="xxx" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="visualstudiofiles" />
+    <configuration name="shmup" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tasker" />
-      <option name="IS_MODULE_SDK" value="true" />
+      <option name="SDK_HOME" value="$USER_HOME$/p3.9/bin/python3.9" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/pygame/sprite/pygame_fnc" />
+      <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/tasker/xxx.py" />
+      <module name="" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/pygame/sprite/pygame_fnc/shmup.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -157,11 +157,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.shmup" />
         <item itemvalue="Python.yumny" />
         <item itemvalue="Python.zzz" />
         <item itemvalue="Python.dhcg" />
         <item itemvalue="Python.ddd" />
-        <item itemvalue="Python.xxx" />
       </list>
     </recent_temporary>
   </component>
@@ -188,7 +188,21 @@
       <option name="project" value="LOCAL" />
       <updated>1623688178641</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="first">
+      <created>1624193514746</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1624193514746</updated>
+    </task>
+    <task id="LOCAL-00004" summary="asd">
+      <created>1624193658954</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1624193658954</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -206,6 +220,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="temp del" />
     <MESSAGE value="first" />
-    <option name="LAST_COMMIT_MESSAGE" value="first" />
+    <MESSAGE value="asd" />
+    <option name="LAST_COMMIT_MESSAGE" value="asd" />
   </component>
 </project>
