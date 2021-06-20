@@ -7,8 +7,8 @@ from pygame.constants import K_LEFT, K_RIGHT
 
 class Settings:
     def __init__(self):
-        self.WIDTH = 360
-        self.HEIGHT = 480
+        self.WIDTH = 800
+        self.HEIGHT = 600
         self.FPS = 60
 
         self.WHITE = (255,255,255)
@@ -19,10 +19,11 @@ class Settings:
         self.YELLOW =(255,255,0)
 
         self.img_dir = path.join(path.dirname(__file__), "img")
+        self.font_name =pygame.font.match_font('arial')
 
        
         
-
+   
 class Player(pygame.sprite.Sprite):
     
     # sprite for player
@@ -122,6 +123,13 @@ class Bullet(pygame.sprite.Sprite):
         if self.rect.bottom < 0:
             self.kill() 
 
+def draw_text(surf, text, size,x,y):
+    stt=Settings()
+    font = pygame.font.Font(stt.font_name, size)
+    text_surface= font.render(text, True, stt.WHITE)
+    text_rect = text_surface.get_rect()
+    text_rect.midtop =  (x,y)
+    surf.blit(text_surface, text_rect)
 
 def game():
         
@@ -159,9 +167,10 @@ def game():
         mobs.add(m)
 
 
+    score=0
+
     # game loop
     game_is_running = True
-
     while game_is_running:
         clock.tick(stt.FPS)
         
@@ -176,10 +185,12 @@ def game():
         
         all_sprites.update() 
         hits = pygame.sprite.groupcollide(mobs, bullets,True, True) # dokill1, dokill2, collided = None)
-        for hit in hits:
-            m=Mob(stt,meteor_img)
+        for hit in hits: 
+            score += abs(50 - (int(hit.radius))) 
+            m=Mob(stt,meteor_img)  
             all_sprites.add(m)
             mobs.add(m)
+  
  
         hits=pygame.sprite.spritecollide(player, mobs, False, pygame.sprite.collide_circle)
         if hits:
@@ -188,6 +199,7 @@ def game():
         screen.fill(stt.BLACK)
         screen.blit(background, background_rect)
         all_sprites.draw(screen)
+        draw_text(screen, str(score),24, stt.WIDTH/2, 10)
         pygame.display.flip()
     pygame.quit()
     sys.exit()
