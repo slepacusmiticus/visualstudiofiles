@@ -41,6 +41,7 @@ class Player(pygame.sprite.Sprite):
         self.rect.centerx = stt.WIDTH/2
         self.rect.bottom = stt.HEIGHT -10
         self.speedx = 0
+        self.shield = 100
     
     def shoot(self,stt,bullet_img, all_sprites,bullets,shoot_sound):
         bullet = Bullet(stt, bullet_img,self.rect.centerx, self.rect.top)
@@ -134,6 +135,23 @@ def draw_text(surf, text, size,x,y):
     text_rect.midtop =  (x,y)
     surf.blit(text_surface, text_rect)
 
+def newmob(stt,meteor_img, all_sprites,mobs):
+    m=Mob(stt,meteor_img)  
+    all_sprites.add(m)
+    mobs.add(m)
+
+def draw_shield_bar(surf,x,y,pct):
+    if pct <0:
+        pct=0
+    BAR_LEN =100
+    BAR_HEIGHT =10
+    fill = (pct)/100*BAR_LEN
+    outline_rect = pygame.Rect(x,y,BAR_LEN, BAR_HEIGHT)
+    fill_rect=pygame.Rect(x,y, fill, BAR_HEIGHT)
+    pygame. draw.rect(surf, (0,255,0), fill_rect)
+    pygame.draw.rect(surf, (255,255,255),outline_rect,2)
+
+
 def game():
         
     pygame.init()
@@ -170,7 +188,7 @@ def game():
         sound.set_volume(0.2)
 
     pygame.mixer.music.load(path.join(stt.snd_dir, 'bkg.wav'))
-    pygame.mixer.music.set_volume(0.3)
+    pygame.mixer.music.set_volume(0.1)
 
     all_sprites = pygame.sprite.Group()
     mobs= pygame.sprite.Group()
@@ -179,9 +197,7 @@ def game():
     all_sprites.add(player)
     
     for i in range(8):
-        m=Mob(stt,meteor_img)
-        all_sprites.add(m)
-        mobs.add(m)
+        newmob(stt,meteor_img, all_sprites,mobs)
 
 
     score=0
@@ -206,21 +222,21 @@ def game():
         for hit in hits: 
             score += abs(50 - (int(hit.radius))) 
             random.choice(expl_sounds).play()
-           
-  
-            m=Mob(stt,meteor_img)  
-            all_sprites.add(m)
-            mobs.add(m)
+            newmob(stt,meteor_img, all_sprites,mobs)
     
  
-        hits=pygame.sprite.spritecollide(player, mobs, False, pygame.sprite.collide_circle)
-        if hits:
-            game_is_running = False
+        hits=pygame.sprite.spritecollide(player, mobs, True, pygame.sprite.collide_circle)
+        for hit in hits:
+            player.shield -= int(hit.radius) *2
+            newmob(stt,meteor_img, all_sprites,mobs)
+            if player.shield < 0:
+                game_is_running = False
        
         screen.fill(stt.BLACK)
         screen.blit(background, background_rect)
         all_sprites.draw(screen)
         draw_text(screen, str(score),24, stt.WIDTH/2, 10)
+        draw_shield_bar(screen, 5,5, player.shield)
         pygame.display.flip()
     pygame.quit()
     sys.exit()
