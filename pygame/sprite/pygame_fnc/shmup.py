@@ -7,7 +7,7 @@ from pygame.constants import K_LEFT, K_RIGHT
 
 class Settings:
     def __init__(self):
-        self.WIDTH = 800
+        self.WIDTH = 700
         self.HEIGHT = 600
         self.FPS = 60
 
