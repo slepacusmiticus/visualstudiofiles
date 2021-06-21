@@ -29,9 +29,12 @@ class Settings:
 class Player(pygame.sprite.Sprite):
     
     # sprite for player
-    def __init__(self,stt, bullet_img,all_sprites, bullets,player_img):
+    def __init__(self,stt, bullet_img,all_sprites, bullets,player_img, shoot_sound):
         pygame.sprite.Sprite.__init__(self)
+        self.all_sprites = all_sprites
+        self.bullets=bullets
         self.bullet_img= bullet_img
+        self.shoot_sound= shoot_sound
         self.stt = stt
         self.image  = (pygame.transform.scale(player_img, (50,38))).convert()
         self.image.set_colorkey(stt.BLACK)
@@ -42,23 +45,28 @@ class Player(pygame.sprite.Sprite):
         self.rect.bottom = stt.HEIGHT -10
         self.speedx = 0
         self.shield = 100
+        self.shoot_delay = 250
+        self.last_shot = pygame.time.get_ticks()
     
     def shoot(self,stt,bullet_img, all_sprites,bullets,shoot_sound):
-        bullet = Bullet(stt, bullet_img,self.rect.centerx, self.rect.top)
-        all_sprites.add(bullet)
-        bullets.add(bullet)
-        shoot_sound.play()
-
+        now = pygame.time.get_ticks()
+        if now -self.last_shot > self.shoot_delay:
+            self.last_shot = now
+            bullet = Bullet(stt, bullet_img,self.rect.centerx, self.rect.top)
+            all_sprites.add(bullet)
+            bullets.add(bullet)
+            shoot_sound.play()
 
     def update(self):
-        self.speedx=0
+        self.speedx = 0
         keystate = pygame.key.get_pressed()
         
         if keystate[pygame.K_LEFT]:
             self.speedx = -8
         if keystate[pygame.K_RIGHT]:
             self.speedx = 8
-        
+        if keystate[pygame.K_SPACE]:
+            self.shoot(self.stt,self.bullet_img, self.all_sprites,self.bullets,self.shoot_sound)
         self.rect.x += self.speedx
         if self.rect.right > self.stt.WIDTH:
             self.rect.right = self.stt.WIDTH
@@ -193,7 +201,7 @@ def game():
     all_sprites = pygame.sprite.Group()
     mobs= pygame.sprite.Group()
     bullets = pygame.sprite.Group()
-    player = Player(stt,bullet_img, all_sprites,bullets,player_img)
+    player = Player(stt,bullet_img, all_sprites,bullets,player_img,shoot_sound)
     all_sprites.add(player)
     
     for i in range(8):
@@ -213,9 +221,9 @@ def game():
         for event in pygame.event.get():
             if event.type == pygame.QUIT: 
                 game_is_running = False
-            elif event.type == pygame.KEYDOWN:
-                if event.key ==pygame.K_SPACE:
-                    player.shoot(stt,bullet_img,all_sprites, bullets,shoot_sound)
+            # elif event.type == pygame.KEYDOWN:
+            #     if event.key ==pygame.K_SPACE:
+            #         player.shoot(stt,bullet_img,all_sprites, bullets,shoot_sound)
         
         all_sprites.update() 
         hits = pygame.sprite.groupcollide(mobs, bullets,True, True) # dokill1, dokill2, collided = None)
