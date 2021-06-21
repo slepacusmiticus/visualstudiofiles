@@ -113,8 +113,8 @@ class Mob(pygame.sprite.Sprite):
         self.rect.y += self.speedy
         if self.rect.top > self.stt.HEIGHT + 10 or self.rect.left < -25 or self.rect.right>self.stt.WIDTH + 20:
             self.rect.x = random.randrange(0, self.stt.WIDTH - self.rect.width)
-            self.rect.y = random.randrange(-100,-40)
-            self.speedy = random.randrange(1,8)
+            self.rect.y = random.randrange(-100, -40)
+            self.speedy = random.randrange(1, 8)
             
 
 class Bullet(pygame.sprite.Sprite):
@@ -135,7 +135,7 @@ class Bullet(pygame.sprite.Sprite):
         if self.rect.bottom < 0:
             self.kill() 
 
-def draw_text(surf, text, size,x,y):
+def draw_text(surf, text, size, x, y):
     stt=Settings()
     font = pygame.font.Font(stt.font_name, size)
     text_surface= font.render(text, True, stt.WHITE)
@@ -148,12 +148,12 @@ def newmob(stt, meteor_img, all_sprites, mobs):
     all_sprites.add(m)
     mobs.add(m)
 
-def draw_shield_bar(surf,x,y,pct):
-    if pct <0:
-        pct=0
+def draw_shield_bar(surf, x, y, pct):
+    if pct < 0:
+        pct = 0
     BAR_LEN =100
     BAR_HEIGHT =10
-    fill = (pct)/100*BAR_LEN
+    fill = (pct) / 100 * BAR_LEN
     outline_rect = pygame.Rect(x,y,  BAR_LEN, BAR_HEIGHT)
     fill_rect=pygame.Rect(x, y, fill, BAR_HEIGHT)
     pygame. draw.rect(surf, (0, 255, 0), fill_rect)
@@ -201,12 +201,12 @@ def game():
     all_sprites = pygame.sprite.Group()
     mobs = pygame.sprite.Group()
     bullets = pygame.sprite.Group()
-    player = Player(stt,bullet_img, all_sprites,bullets,player_img,shoot_sound)
+    player = Player(stt, bullet_img, all_sprites, bullets, player_img, shoot_sound)
     all_sprites.add(player)
-    
+
+
     for i in range(8):
         newmob(stt, meteor_img, all_sprites,mobs)
-
 
     score = 0
     pygame.mixer.music.play(loops=-1)
