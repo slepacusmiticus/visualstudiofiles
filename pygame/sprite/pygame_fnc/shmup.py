@@ -36,7 +36,7 @@ class Player(pygame.sprite.Sprite):
         self.bullet_img= bullet_img
         self.shoot_sound= shoot_sound
         self.stt = stt
-        self.image  = (pygame.transform.scale(player_img, (50,38))).convert()
+        self.image = (pygame.transform.scale(player_img, (50,38))).convert()
         self.image.set_colorkey(stt.BLACK)
         self.rect = self.image.get_rect() 
         self.radius=20
@@ -48,14 +48,14 @@ class Player(pygame.sprite.Sprite):
         self.shoot_delay = 250
         self.last_shot = pygame.time.get_ticks()
     
-    def shoot(self,stt,bullet_img, all_sprites,bullets,shoot_sound):
+    def shoot(self):
         now = pygame.time.get_ticks()
         if now - self.last_shot > self.shoot_delay:
             self.last_shot = now
-            bullet = Bullet(stt, bullet_img,self.rect.centerx, self.rect.top)
-            all_sprites.add(bullet)
-            bullets.add(bullet)
-            shoot_sound.play()
+            bullet = Bullet(self.stt, self.bullet_img, self.rect.centerx, self.rect.top)
+            self.all_sprites.add(bullet)
+            self.bullets.add(bullet)
+            self.shoot_sound.play()
 
     def update(self):
         self.speedx = 0
@@ -66,7 +66,7 @@ class Player(pygame.sprite.Sprite):
         if keystate[pygame.K_RIGHT]:
             self.speedx = 8
         if keystate[pygame.K_SPACE]:
-            self.shoot(self.stt,self.bullet_img, self.all_sprites,self.bullets,self.shoot_sound)
+            self.shoot()
         self.rect.x += self.speedx
         if self.rect.right > self.stt.WIDTH:
             self.rect.right = self.stt.WIDTH
@@ -98,12 +98,12 @@ class Mob(pygame.sprite.Sprite):
         now = pygame.time.get_ticks()  
         if now - self.last_update >50:
             self.last_update = now
-            self.rot= (self.rot+ self.rot_speed) % 360
+            self.rot= (self.rot + self.rot_speed) % 360
             new_image = pygame.transform.rotate(self.image_orig, self.rot)
-            old_center =self.rect.center
+            old_center = self.rect.center
             self.image = new_image
             self.rect = self.image.get_rect()
-            self.rect.center= old_center  
+            self.rect.center = old_center
 
 
 
@@ -119,15 +119,15 @@ class Mob(pygame.sprite.Sprite):
 
 class Bullet(pygame.sprite.Sprite):
 
-    def __init__(self,stt,bullet_img,x,y) -> None:
+    def __init__(self, stt, bullet_img, x, y) -> None:
         pygame.sprite.Sprite.__init__(self)
         self.stt = stt
         self.image  = (pygame.transform.scale(bullet_img, (5,35))).convert()
         self.image.set_colorkey(stt.BLACK)
         self.rect = self.image.get_rect()
         self.rect.bottom = y
-        self.rect.centerx=x
-        self.speedy=-10
+        self.rect.centerx = x
+        self.speedy =-10
 
     def update(self):
         self.rect.y += self.speedy 
@@ -140,11 +140,11 @@ def draw_text(surf, text, size,x,y):
     font = pygame.font.Font(stt.font_name, size)
     text_surface= font.render(text, True, stt.WHITE)
     text_rect = text_surface.get_rect()
-    text_rect.midtop =  (x,y)
+    text_rect.midtop =  (x, y)
     surf.blit(text_surface, text_rect)
 
-def newmob(stt,meteor_img, all_sprites,mobs):
-    m=Mob(stt,meteor_img)  
+def newmob(stt, meteor_img, all_sprites, mobs):
+    m = Mob(stt, meteor_img)
     all_sprites.add(m)
     mobs.add(m)
 
@@ -154,17 +154,17 @@ def draw_shield_bar(surf,x,y,pct):
     BAR_LEN =100
     BAR_HEIGHT =10
     fill = (pct)/100*BAR_LEN
-    outline_rect = pygame.Rect(x,y,BAR_LEN, BAR_HEIGHT)
-    fill_rect=pygame.Rect(x,y, fill, BAR_HEIGHT)
-    pygame. draw.rect(surf, (0,255,0), fill_rect)
-    pygame.draw.rect(surf, (255,255,255),outline_rect,2)
+    outline_rect = pygame.Rect(x,y,  BAR_LEN, BAR_HEIGHT)
+    fill_rect=pygame.Rect(x, y, fill, BAR_HEIGHT)
+    pygame. draw.rect(surf, (0, 255, 0), fill_rect)
+    pygame.draw.rect(surf, (255, 255, 255), outline_rect, 2)
 
 
 def game():
         
     pygame.init()
     pygame.mixer.init()
-    stt=Settings()
+    stt = Settings()
     screen = pygame.display.set_mode((stt.WIDTH, stt.HEIGHT))
     pygame.display.set_caption('My game')
     clock = pygame.time.Clock()
@@ -173,9 +173,9 @@ def game():
     background = pygame.image.load(path.join(stt.img_dir, "stars.png")).convert()
     background_rect= background.get_rect()
     player_img = pygame.image.load(path.join(stt.img_dir,"playerShip1_orange.png"))
-    #print(player_img)
-    #meteor_img = pygame.image.load(path.join(stt.img_dir,"meteorBrown_med1.png"))
-    bullet_img = pygame.image.load(path.join(stt.img_dir,"laserRed16.png"))
+    # print(player_img)
+    # meteor_img = pygame.image.load(path.join(stt.img_dir,"meteorBrown_med1.png"))
+    bullet_img = pygame.image.load(path.join(stt.img_dir, "laserRed16.png"))
     meteor_img = []
     meteor_list = ['meteorBrown_big1.png', 'meteorBrown_big2.png', 'meteorBrown_med1.png', 
                   'meteorBrown_med1.png', 'meteorBrown_small1.png', 'meteorBrown_small2.png', 
@@ -184,7 +184,7 @@ def game():
         print('\nXXX',path.join(stt.img_dir,img))
         meteor_img.append(pygame.image.load(path.join(stt.img_dir, img)).convert())
 
-    #load all game sounds
+    # load all game sounds
     shoot_sound = pygame.mixer.Sound(path.join(stt.snd_dir, "laser9.wav"))
     pygame.mixer.Sound.set_volume(shoot_sound, 0.3)
 
@@ -199,16 +199,16 @@ def game():
     pygame.mixer.music.set_volume(0.1)
 
     all_sprites = pygame.sprite.Group()
-    mobs= pygame.sprite.Group()
+    mobs = pygame.sprite.Group()
     bullets = pygame.sprite.Group()
     player = Player(stt,bullet_img, all_sprites,bullets,player_img,shoot_sound)
     all_sprites.add(player)
     
     for i in range(8):
-        newmob(stt,meteor_img, all_sprites,mobs)
+        newmob(stt, meteor_img, all_sprites,mobs)
 
 
-    score=0
+    score = 0
     pygame.mixer.music.play(loops=-1)
 
     # game loop
@@ -216,7 +216,7 @@ def game():
     while game_is_running:
         clock.tick(stt.FPS)
         
-        #input events
+        # input events
         player.speedx=0
         for event in pygame.event.get():
             if event.type == pygame.QUIT: 
@@ -226,11 +226,11 @@ def game():
             #         player.shoot(stt,bullet_img,all_sprites, bullets,shoot_sound)
         
         all_sprites.update() 
-        hits = pygame.sprite.groupcollide(mobs, bullets,True, True) # dokill1, dokill2, collided = None)
+        hits = pygame.sprite.groupcollide(mobs, bullets, True, True) # dokill1, dokill2, collided = None)
         for hit in hits: 
             score += abs(50 - (int(hit.radius))) 
             random.choice(expl_sounds).play()
-            newmob(stt,meteor_img, all_sprites,mobs)
+            newmob(stt, meteor_img, all_sprites, mobs)
     
  
         hits=pygame.sprite.spritecollide(player, mobs, True, pygame.sprite.collide_circle)
