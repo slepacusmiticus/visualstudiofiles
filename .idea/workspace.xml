@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="772085ac-64f5-476a-9ef3-07561449f693" name="Default Changelist" comment="asd">
-      <change beforePath="$PROJECT_DIR$/pygame/sprite/pygame_fnc/shmup.py" beforeDir="false" afterPath="$PROJECT_DIR$/pygame/sprite/pygame_fnc/shmup.py" afterDir="false" />
+    <list default="true" id="772085ac-64f5-476a-9ef3-07561449f693" name="Default Changelist" comment="before explosion with some corrections">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -202,7 +202,28 @@
       <option name="project" value="LOCAL" />
       <updated>1624193658954</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="before explosion with some corrections">
+      <created>1624309978075</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1624309978075</updated>
+    </task>
+    <task id="LOCAL-00006" summary="before explosion with some corrections">
+      <created>1624310328373</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1624310328373</updated>
+    </task>
+    <task id="LOCAL-00007" summary="before explosion with some corrections">
+      <created>1624310799760</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1624310799760</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -221,6 +242,7 @@
     <MESSAGE value="temp del" />
     <MESSAGE value="first" />
     <MESSAGE value="asd" />
-    <option name="LAST_COMMIT_MESSAGE" value="asd" />
+    <MESSAGE value="before explosion with some corrections" />
+    <option name="LAST_COMMIT_MESSAGE" value="before explosion with some corrections" />
   </component>
 </project>
