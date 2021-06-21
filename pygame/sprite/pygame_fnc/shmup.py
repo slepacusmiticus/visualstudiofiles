@@ -50,7 +50,7 @@ class Player(pygame.sprite.Sprite):
     
     def shoot(self,stt,bullet_img, all_sprites,bullets,shoot_sound):
         now = pygame.time.get_ticks()
-        if now -self.last_shot > self.shoot_delay:
+        if now - self.last_shot > self.shoot_delay:
             self.last_shot = now
             bullet = Bullet(stt, bullet_img,self.rect.centerx, self.rect.top)
             all_sprites.add(bullet)
