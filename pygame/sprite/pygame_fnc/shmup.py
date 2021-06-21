@@ -47,6 +47,7 @@ class Player(pygame.sprite.Sprite):
         self.shield = 100
         self.shoot_delay = 250
         self.last_shot = pygame.time.get_ticks()
+
     
     def shoot(self):
         now = pygame.time.get_ticks()
