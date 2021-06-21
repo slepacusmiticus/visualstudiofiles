@@ -80,7 +80,7 @@ class Mob(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.stt = stt
         
-        self.image_orig  = random.choice(meteor_img) #(pygame.transform.scale(meteor_img, (25,25))).convert()
+        self.image_orig  = random.choice(meteor_img)  # (pygame.transform.scale(meteor_img, (25,25))).convert()
         self.image_orig.set_colorkey(stt.BLACK)
         self.image =  self.image_orig.copy() 
         self.rect = self.image.get_rect()
@@ -136,9 +136,9 @@ class Bullet(pygame.sprite.Sprite):
             self.kill() 
 
 def draw_text(surf, text, size, x, y):
-    stt=Settings()
+    stt = Settings()
     font = pygame.font.Font(stt.font_name, size)
-    text_surface= font.render(text, True, stt.WHITE)
+    text_surface = font.render(text, True, stt.WHITE)
     text_rect = text_surface.get_rect()
     text_rect.midtop =  (x, y)
     surf.blit(text_surface, text_rect)
