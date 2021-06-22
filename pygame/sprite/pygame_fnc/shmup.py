@@ -47,6 +47,9 @@ class Player(pygame.sprite.Sprite):
         self.shield = 100
         self.shoot_delay = 250
         self.last_shot = pygame.time.get_ticks()
+        self.lives = 3
+        self.hidden =False
+        self.hide_timer = pygame.time.get_ticks()
 
     
     def shoot(self):
@@ -58,7 +61,19 @@ class Player(pygame.sprite.Sprite):
             self.bullets.add(bullet)
             self.shoot_sound.play()
 
+    def hide(self):
+        self.hidden = True
+        self.hidden_timer = pygame.time.get_ticks()
+        self.rect.center = (self.stt.WIDTH/2, self.stt.HEIGHT + 200)
+
     def update(self):
+        #unhide if hidden
+        if self.hidden and pygame.time.get_ticks()-self.hidden_timer >1000: 
+            self.hidden =False
+            self.rect.centerx=self.stt.WIDTH/2 
+            self.rect.bottom=self.stt.HEIGHT -10
+
+
         self.speedx = 0
         keystate = pygame.key.get_pressed()
         
@@ -185,6 +200,12 @@ def draw_shield_bar(surf, x, y, pct):
     pygame. draw.rect(surf, (0, 255, 0), fill_rect)
     pygame.draw.rect(surf, (255, 255, 255), outline_rect, 2)
 
+def draw_lives(surf,x,y,lives,img):
+    for _ in range (lives):
+        img_rect=img.get_rect()
+        img_rect.x = x+30 * _
+        img_rect.y = y
+        surf.blit(img, img_rect)
 
 def game():
         
@@ -199,8 +220,8 @@ def game():
     background = pygame.image.load(path.join(stt.img_dir, "stars.png")).convert()
     background_rect= background.get_rect()
     player_img = pygame.image.load(path.join(stt.img_dir,"playerShip1_orange.png"))
-    # print(player_img)
-    # meteor_img = pygame.image.load(path.join(stt.img_dir,"meteorBrown_med1.png"))
+    player_mini_img =pygame.transform.scale(player_img,(25,19))
+    player_mini_img.set_colorkey(stt.BLACK)
     bullet_img = pygame.image.load(path.join(stt.img_dir, "laserRed16.png"))
     meteor_img = []
     meteor_list = ['meteorBrown_big1.png', 'meteorBrown_big2.png', 'meteorBrown_med1.png', 
@@ -239,6 +260,8 @@ def game():
     for sound in expl_sounds:
         sound.set_volume(0.2)
 
+    player_die_snd = pygame.mixer.Sound(path.join(stt.snd_dir, 'rumble1.ogg'))
+    pygame.mixer.Sound.set_volume(player_die_snd, 0.9)
     pygame.mixer.music.load(path.join(stt.snd_dir, 'bkg.wav'))
     pygame.mixer.music.set_volume(0.1)
 
@@ -286,11 +309,14 @@ def game():
             all_sprites.add(expl)
             newmob(stt,meteor_img, all_sprites,mobs)
             if player.shield <= 0:
+                player_die_snd.play()
                 death_explosion= Explosion(explosion_anim, player.rect.center,'player')
                 all_sprites.add(death_explosion)
-                player.kill()
+                player.hide()
+                player.lives -=1
+                player.shields = 100
 
-        if not player.alive() and not death_explosion.alive():
+        if player.lives==0 and not death_explosion.alive():
             game_is_running = False
 
             
@@ -300,6 +326,7 @@ def game():
         all_sprites.draw(screen)
         draw_text(screen, str(score),24, stt.WIDTH/2, 10)
         draw_shield_bar(screen, 5,5, player.shield)
+        draw_lives(screen, stt.WIDTH-100,5,player.lives,player_mini_img)
         pygame.display.flip()
     pygame.quit()
     sys.exit()
