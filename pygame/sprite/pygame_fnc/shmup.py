@@ -151,6 +151,26 @@ class Bullet(pygame.sprite.Sprite):
         if self.rect.bottom < 0:
             self.kill() 
 
+class Pow(pygame.sprite.Sprite):
+    def __init__(self, center,powerup_images,stt):
+        pygame.sprite.Sprite.__init__(self)
+        self.type=random.choice(['shield','gun'])
+        self.stt =stt
+        self.image = powerup_images[self.type]
+        self.image.set_colorkey(stt.BLACK)
+        self.rect=self.image.get_rect()
+        self.rect.center = center
+        self.speedy =2
+
+    def update(self):
+        self.rect.y +=self.speedy
+        #kill if it moves off the bottom of the screen
+        if self.rect.top > self.stt.HEIGHT:
+            self.kill()
+
+    
+
+
 class Explosion(pygame.sprite.Sprite):
     def __init__(self,explosion_anim, center, size):
         pygame.sprite.Sprite.__init__(self)
@@ -230,7 +250,7 @@ def game():
     for img in meteor_list:
         print('\nXXX',path.join(stt.img_dir,img))
         meteor_img.append(pygame.image.load(path.join(stt.img_dir, img)).convert())
-
+    
     explosion_anim = {}
     explosion_anim['lg'] = []
     explosion_anim['sm'] = []
@@ -248,6 +268,11 @@ def game():
         img = pygame.image.load(path.join(stt.img_dir,filename)).convert()
         img.set_colorkey(stt.BLACK)
         explosion_anim['player'].append(img)
+
+    powerup_images ={}
+    powerup_images['shield']=pygame.image.load(path.join(stt.img_dir, 'shield_gold.png')).convert()
+    powerup_images['gun']=pygame.image.load(path.join(stt.img_dir, 'bolt_gold.png')).convert()
+    
 
     # load all game sounds
     shoot_sound = pygame.mixer.Sound(path.join(stt.snd_dir, "laser9.wav"))
@@ -268,6 +293,7 @@ def game():
     all_sprites = pygame.sprite.Group()
     mobs = pygame.sprite.Group()
     bullets = pygame.sprite.Group()
+    powerups =pygame.sprite.Group()
     player = Player(stt, bullet_img, all_sprites, bullets, player_img, shoot_sound)
     all_sprites.add(player)
 
@@ -299,6 +325,10 @@ def game():
             random.choice(expl_sounds).play()
             expl = Explosion(explosion_anim,hit.rect.center, "lg")
             all_sprites.add(expl)
+            #10% chance of spawning
+            if random.random() > 0.9 powerups:
+                pow= Pow(hit.rect.center,powerup_images,stt)
+                all_sprites.add(pow)
             newmob(stt, meteor_img, all_sprites, mobs)
     
  
@@ -316,6 +346,18 @@ def game():
                 player.lives -=1
                 player.shields = 100
 
+        #check to see if player hit powerup
+        hits = pygame.sprite.spritecollide(player, powerups, True)
+        for hits in hits:
+            if hit.type =="shield":
+                player.shield += random.randrange(10,30)
+                if player.shield >= 100:
+                    player.shield = 100
+                if hit.type =="gun":
+                    pass
+            
+
+        #if player died and anim finished playing
         if player.lives==0 and not death_explosion.alive():
             game_is_running = False
 
