@@ -213,6 +213,7 @@ def game():
     explosion_anim = {}
     explosion_anim['lg'] = []
     explosion_anim['sm'] = []
+    explosion_anim['player']=[]
     for _ in range(9):
         filename = f'regularExplosion0{_}.png'
         img = pygame.image.load(path.join(stt.img_dir,filename)).convert()
@@ -221,6 +222,11 @@ def game():
         explosion_anim['lg'].append(img_lg)
         img_sm = pygame.transform.scale(img, (32,32))
         explosion_anim['sm'].append(img_sm)
+        #explosion for the player if it's hit
+        filename = f'sonicExplosion0{_}.png'
+        img = pygame.image.load(path.join(stt.img_dir,filename)).convert()
+        img.set_colorkey(stt.BLACK)
+        explosion_anim['player'].append(img)
 
     # load all game sounds
     shoot_sound = pygame.mixer.Sound(path.join(stt.snd_dir, "laser9.wav"))
@@ -279,9 +285,16 @@ def game():
             expl = Explosion(explosion_anim,hit.rect.center, "sm")
             all_sprites.add(expl)
             newmob(stt,meteor_img, all_sprites,mobs)
-            if player.shield < 0:
-                game_is_running = False
-       
+            if player.shield <= 0:
+                death_explosion= Explosion(explosion_anim, player.rect.center,'player')
+                all_sprites.add(death_explosion)
+                player.kill()
+
+        if not player.alive() and not death_explosion.alive():
+            game_is_running = False
+
+            
+
         screen.fill(stt.BLACK)
         screen.blit(background, background_rect)
         all_sprites.draw(screen)
