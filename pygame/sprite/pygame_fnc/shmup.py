@@ -185,6 +185,18 @@ def game():
         print('\nXXX',path.join(stt.img_dir,img))
         meteor_img.append(pygame.image.load(path.join(stt.img_dir, img)).convert())
 
+    explosion_anim = {}
+    explosion_anim['lg'] = []
+    explosion_anim['sm'] = []
+    for _ in range(9):
+        filename = f'regularExplosion0{_}.png'
+        img = pygame.image.load(path.join(stt.img_dir,filename)).convert()
+        img.set_colorkey(stt.BLACK)
+        img_lg = pygame.transform.scale(img, (75, 75))
+        explosion_anim['lg'].append(img_lg)
+        img_sm = pygame.transform.scale(img, (32,32))
+        explosion_anim['sm'].append(img_sm)
+
     # load all game sounds
     shoot_sound = pygame.mixer.Sound(path.join(stt.snd_dir, "laser9.wav"))
     pygame.mixer.Sound.set_volume(shoot_sound, 0.3)
