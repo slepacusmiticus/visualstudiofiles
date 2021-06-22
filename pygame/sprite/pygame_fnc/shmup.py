@@ -136,6 +136,31 @@ class Bullet(pygame.sprite.Sprite):
         if self.rect.bottom < 0:
             self.kill() 
 
+class Explosion(pygame.sprite.Sprite):
+    def __init__(self,explosion_anim, center, size):
+        pygame.sprite.Sprite.__init__(self)
+        self.explosion_anim =explosion_anim
+        self.size = size
+        self.image = explosion_anim[self.size][0]
+        self.rect = self.image.get_rect()
+        self.rect.center = center
+        self.frame = 0
+        self.last_update =pygame.time.get_ticks()
+        self.frame_rate = 50
+
+    def update(self):
+        now = pygame.time.get_ticks()
+        if now - self.last_update > self.frame_rate:
+            self.last_update = now
+            self.frame += 1
+            if self.frame == len(self.explosion_anim[self.size]):
+                self.kill()
+            else:
+                center = self.rect.center
+                self.image = self.explosion_anim[self.size][self.frame]
+                self.rect = self.image.get_rect()
+                self.rect.center = center
+
 def draw_text(surf, text, size, x, y):
     stt = Settings()
     font = pygame.font.Font(stt.font_name, size)
@@ -243,12 +268,16 @@ def game():
         for hit in hits: 
             score += abs(50 - (int(hit.radius))) 
             random.choice(expl_sounds).play()
+            expl = Explosion(explosion_anim,hit.rect.center, "lg")
+            all_sprites.add(expl)
             newmob(stt, meteor_img, all_sprites, mobs)
     
  
         hits=pygame.sprite.spritecollide(player, mobs, True, pygame.sprite.collide_circle)
         for hit in hits:
             player.shield -= int(hit.radius) *2
+            expl = Explosion(explosion_anim,hit.rect.center, "sm")
+            all_sprites.add(expl)
             newmob(stt,meteor_img, all_sprites,mobs)
             if player.shield < 0:
                 game_is_running = False
