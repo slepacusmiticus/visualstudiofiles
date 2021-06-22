@@ -261,7 +261,7 @@ def game():
         sound.set_volume(0.2)
 
     player_die_snd = pygame.mixer.Sound(path.join(stt.snd_dir, 'rumble1.ogg'))
-    pygame.mixer.Sound.set_volume(player_die_snd, 0.9)
+    pygame.mixer.Sound.set_volume(player_die_snd, 0.2)
     pygame.mixer.music.load(path.join(stt.snd_dir, 'bkg.wav'))
     pygame.mixer.music.set_volume(0.1)
 
