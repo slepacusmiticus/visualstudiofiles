@@ -1,5 +1,6 @@
 import pygame, sys
 import random
+import numpy as np
 from os import path
 from pygame.constants import K_LEFT, K_RIGHT
 
