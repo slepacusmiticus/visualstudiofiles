@@ -1,7 +1,7 @@
 import pygame as pg
 import random
-import settings as s
-
+from settings import *
+from sprites import *
 
 class Game:
     def __init__(self):
@@ -9,7 +9,7 @@ class Game:
 
         pg.init()
         pg.mixer.init()
-        self.screen=pg.display.set_mode((s.WIDTH, s.HEIGHT))
+        self.screen=pg.display.set_mode((WIDTH, HEIGHT))
         pg.display.set_caption('Platformer')
         self.clock =pg.time.Clock()
         self.running = True
@@ -17,7 +17,9 @@ class Game:
     def new(self):
         #start a new game
 
-        self.all_sprites =pg.sprite.Group()
+        self.all_sprites = pg.sprite.Group()
+        self.player = Player()
+        self.all_sprites.add(self.player)
         self.run()
     
     def run(self):
@@ -25,7 +27,7 @@ class Game:
         
         self.playing=True
         while self.playing:
-            self.clock.tick(s.FPS)
+            self.clock.tick(FPS)
             self.events()
             self.update()
             self.draw()
@@ -44,7 +46,7 @@ class Game:
                 self.running = False
 
     def draw(self):
-        self.screen.fill(s.BLACK)
+        self.screen.fill(BLACK)
         self.all_sprites.draw(self.screen)
         pg.display.flip()
 
