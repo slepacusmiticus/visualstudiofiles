@@ -1,3 +1,5 @@
 {
-    "python.pythonPath": "/home/dumitru/p3.9/bin/python3.9"
+    "python.pythonPath": "/home/dumitru/p3.9/bin/python3.9",
+    "python.autoComplete.addBrackets": true,
+    "python.defaultInterpreterPath": "python3"
 }
