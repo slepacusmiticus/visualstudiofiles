@@ -1,7 +1,0 @@
-/pygame/sounds/
-/.idea/*
-/.vscode/*
-/tasker
-/images
-/platformer/__pycache__/*
-/.gitignore
