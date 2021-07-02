@@ -3,15 +3,24 @@ from settings import *
 vec =pg.math.Vector2
 
 class Player(pg.sprite.Sprite):
-    def __init__(self):
+    def __init__(self, game):
         pg.sprite.Sprite.__init__(self)
-        self.image=pg.Surface((30,40))
+        self.game = game
+        self.image = pg.Surface((30,40))
         self.image.fill(YELLOW)
         self.rect =self.image.get_rect()
         self.rect.center = (WIDTH/2, HEIGHT/2)
         self.pos=vec(WIDTH/2,HEIGHT/2)
         self.vel=vec(0,0)
         self.acc=vec(0,0)
+    
+    def jump(self):
+        #jump only if standing on a platform
+        self.rect.y +=1
+        hits=pg.sprite.spritecollide(self, self.game.platforms, False)
+        self.rect.y -=1
+        if hits:
+            self.vel.y = -20
 
     def update(self):
         self.acc=vec(0,0.5)
