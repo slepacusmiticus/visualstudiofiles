@@ -91,15 +91,40 @@ class Game:
         self.all_sprites.draw(self.screen)
         self.draw_text(str(self.score),22,WHITE,WIDTH/2,15)
         pg.display.flip()
+        
 
     def show_start_screen(self):
         self.screen.fill(BGCOLOR)
-        self.draw_text(TITLE,48,WHITE,WIDTH/2,HEIIGHT/4)
-        
+        self.draw_text(TITLE,48,WHITE,WIDTH/2,HEIGHT/4)
+        self.draw_text("Arrows to move left/right, space to jump",22,WHITE,WIDTH/2,HEIGHT/2)
+        self.draw_text("Press any key to play", 22,WHITE, WIDTH/2, HEIGHT*3/4)
+        pg.display.flip()
+        self.wait_for_key()
 
     def show_gameover_screen(self):
-        pass
+        #if running is set to false exit func
+        if not self.running:
+            return
+        self.screen.fill(BGCOLOR)
+        self.draw_text("GAME OVER",48,WHITE,WIDTH/2,HEIGHT/4)
+        self.draw_text("Score: "+str(self.score),22,WHITE,WIDTH/2,HEIGHT/2)
+        self.draw_text("Press any key to play again", 22,WHITE, WIDTH/2, HEIGHT*3/4)
+        pg.display.flip()
+        self.wait_for_key()
 
+    def wait_for_key(self):
+        waiting =True
+        while waiting:
+            self.clock.tick(FPS)
+            for event in pg.event.get():
+                if event.type ==pg.QUIT:
+                    waiting=False
+                    self.running =False
+                if event.type == pg.KEYUP:
+                    waiting =False
+
+
+                
     def draw_text(self,text,size,color,x,y):
         font= pg.font.Font(self.font_name,size)
         text_surface = font.render(text,True, color)
