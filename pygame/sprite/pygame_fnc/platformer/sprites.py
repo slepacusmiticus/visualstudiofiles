@@ -1,3 +1,4 @@
+from settings import PLAYER_JUMP
 import pygame as pg
 from settings import *
 vec =pg.math.Vector2
@@ -20,7 +21,7 @@ class Player(pg.sprite.Sprite):
         hits=pg.sprite.spritecollide(self, self.game.platforms, False)
         self.rect.y -=1
         if hits:
-            self.vel.y = -20
+            self.vel.y = -PLAYER_JUMP
 
     def update(self):
         self.acc=vec(0,0.5)
