@@ -1,3 +1,4 @@
+from settings import BGCOLOR
 import pygame as pg
 import random
 from settings import *
@@ -86,13 +87,15 @@ class Game:
                     self.player.jump()
 
     def draw(self):
-        self.screen.fill(BLACK)
+        self.screen.fill(BGCOLOR)
         self.all_sprites.draw(self.screen)
         self.draw_text(str(self.score),22,WHITE,WIDTH/2,15)
         pg.display.flip()
 
     def show_start_screen(self):
-        pass
+        self.screen.fill(BGCOLOR)
+        self.draw_text(TITLE,48,WHITE,WIDTH/2,HEIIGHT/4)
+        
 
     def show_gameover_screen(self):
         pass
