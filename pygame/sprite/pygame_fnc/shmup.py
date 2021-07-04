@@ -226,7 +226,7 @@ def draw_text(surf, text, size, x, y):
 
 def show_game_over_screen(screen,stt,clock,background,background_rect):
     screen.blit(background, background_rect)
-    draw_text(screen, "SMUP", 64, stt.WIDTH/2, stt.HEIGHT/4)
+    draw_text(screen, "SHM-UP", 64, stt.WIDTH/2, stt.HEIGHT/4)
     draw_text(screen, 'play by using: Arrow keys to move, Space to fire', 22, stt.WIDTH/2, stt.HEIGHT/2)
     draw_text(screen, "Press any key to start", 18, stt.WIDTH/2, stt.HEIGHT*3/4)
     pygame.display.flip()

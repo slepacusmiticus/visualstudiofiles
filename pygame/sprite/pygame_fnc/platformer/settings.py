@@ -4,6 +4,7 @@ FPS =60
 TITLE = "Platformer"
 FONT_NAME='arial'
 HS_FILE ="highscore.txt"
+SPRITESHEET = "spritesheet_jumper.png"
 
 PLAYER_ACC = 0.5
 PLAYER_FRICTION = -0.12
