@@ -37,7 +37,7 @@ class Game:
         self.player = Player(self)
         self.all_sprites.add(self.player)
         for plat in PLATFORM_LIST:
-            p=Platform(*plat)
+            p=Platform(self, *plat)
             self.all_sprites.add(p)
             self.platforms.add(p)
         self.run()
@@ -64,13 +64,13 @@ class Game:
                 self.player.vel.y =0
         #if player reaches the top 3/4 of the screen
         if self.player.rect.top<=HEIGHT/4:
-            self.player.pos.y += abs(self.player.vel.y)
+            self.player.pos.y += max(abs(self.player.vel.y),2)
             for plat in self.platforms:
-                plat.rect.y +=abs(self.player.vel.y)
+                plat.rect.y += max(abs(self.player.vel.y),2)
                 if plat.rect.top >= HEIGHT:
                     plat.kill()
                     self.score += 10
-
+        #die!
         if self.player.rect.bottom >HEIGHT:
             for sprite in self.all_sprites:
                 sprite.rect.y -= max(self.player.vel.y,10)
@@ -79,12 +79,12 @@ class Game:
         if len(self.platforms) == 0:
             self.playing = False
 
-        #spawn new plaatforms
+        #spawn new platforms
         while len(self.platforms) <6:   # nr of new platforms
             width = random.randrange(50,100)
-            p= Platform(random.randrange(0, WIDTH-width),
-                        random.randrange(-75, -30),
-                        width,20)
+            p= Platform(self,random.randrange(0, WIDTH-width),
+                        random.randrange(-75, -30)
+                        )
 
             self.platforms.add(p)
             self.all_sprites.add(p)
@@ -103,6 +103,7 @@ class Game:
     def draw(self):
         self.screen.fill(BGCOLOR)
         self.all_sprites.draw(self.screen)
+        self.screen.blit(self.player.image, self.player.rect)
         self.draw_text(str(self.score),22,WHITE,WIDTH/2,15)
         pg.display.flip()
         
