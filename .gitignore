@@ -2,6 +2,7 @@ pygame/sounds/
 .idea/
 .vscode/
 tasker
+settings.json
 images/
 platformer/__pycache__/
 .gitignore
