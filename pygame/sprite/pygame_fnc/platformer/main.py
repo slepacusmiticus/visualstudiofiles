@@ -38,12 +38,12 @@ class Game:
         self.score =0
         self.all_sprites = pg.sprite.Group()
         self.platforms= pg.sprite.Group()
+        self.powerups =pg.sprite.Group()
         self.player = Player(self)
-        self.all_sprites.add(self.player)
+       
         for plat in PLATFORM_LIST:
-            p=Platform(self, *plat)
-            self.all_sprites.add(p)
-            self.platforms.add(p)
+            Platform(self, *plat)
+            
         pg.mixer.music.load(path.join(self.snd_dir, 'happytune.wav'))
         self.run()
     
@@ -69,10 +69,13 @@ class Game:
                 for hit in hits:
                     if hit.rect.bottom >lowest.rect.bottom:
                         lowest=hit
-                if self.player.pos.y<lowest.rect.centery:
-                    self.player.pos.y =lowest.rect.top
-                    self.player.vel.y = 0
-                    self.player.jumping =False
+                if self.player.pos.x<lowest.rect.right +10 and \
+                    self.player.pos.x>lowest.rect.left-10:
+
+                    if self.player.pos.y<lowest.rect.centery:
+                        self.player.pos.y =lowest.rect.top
+                        self.player.vel.y = 0
+                        self.player.jumping =False
 
         
         #if player reaches the top 3/4 of the screen
@@ -83,8 +86,16 @@ class Game:
                 if plat.rect.top >= HEIGHT:
                     plat.kill()
                     self.score += 10
+
+        # if player hits powerup
+        pow_hits = pg.sprite.spritecollide(self.player,self.powerups, True)
+        for pow in pow_hits:
+            if pow.type == 'boost':
+                self.player.vel.y = -BOOST_POWER
+                self.player.jumping = False
+
         #die!
-        if self.player.rect.bottom >HEIGHT:
+        if self.player.rect.bottom > HEIGHT:
             for sprite in self.all_sprites:
                 sprite.rect.y -= max(self.player.vel.y,10)
                 if sprite.rect.bottom < 0:
@@ -95,12 +106,11 @@ class Game:
         #spawn new platforms
         while len(self.platforms) <6:   # nr of new platforms
             width = random.randrange(50,100)
-            p= Platform(self,random.randrange(0, WIDTH-width),
+            Platform(self,random.randrange(0, WIDTH-width),
                         random.randrange(-75, -30)
                         )
 
-            self.platforms.add(p)
-            self.all_sprites.add(p)
+          
 
     def events(self):
             
