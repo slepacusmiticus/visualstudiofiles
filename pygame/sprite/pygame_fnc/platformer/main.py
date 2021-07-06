@@ -31,20 +31,25 @@ class Game:
         #load sounds
         self.snd_dir = path.join(self.dir, 'snd')
         self.jump_sound = pg.mixer.Sound(path.join(self.snd_dir, 'SFX_Jump_05.wav'))
+        self.boost_sound = pg.mixer.Sound(path.join(self.snd_dir, 'poing.ogg'))
         pg.mixer.Sound.set_volume(self.jump_sound, 0.1)
+        pg.mixer.Sound.set_volume(self.boost_sound, 0.1)
 
     def new(self):
         #start a new game
         self.score =0
-        self.all_sprites = pg.sprite.Group()
+        self.all_sprites = pg.sprite.LayeredUpdates() # this types of group 
+                                                        # allows to specify order in which sprites are drwn to the screen
         self.platforms= pg.sprite.Group()
         self.powerups =pg.sprite.Group()
+        self.mobs=pg.sprite.Group()
         self.player = Player(self)
        
         for plat in PLATFORM_LIST:
             Platform(self, *plat)
-            
-        pg.mixer.music.load(path.join(self.snd_dir, 'happytune.wav'))
+        self.mob_timer = 0  
+        self.mus=pg.mixer.music.load(path.join(self.snd_dir, 'happytune.wav'))
+        pg.mixer.music.set_volume(0.1)
         self.run()
     
     def run(self):
@@ -61,6 +66,18 @@ class Game:
     def update(self):
         #game loop update
         self.all_sprites.update()
+
+        # spawn a mob?
+        now = pg.time.get_ticks()  # number of milliseconds since pygame.init()
+        if now-self.mob_timer > 5000 + random.choice([-100,-500, 0 ,500,1000]):
+            self.mob_timer = now
+            Mob(self)
+        
+        #player hits mob?
+        mob_hits = pg.sprite.spritecollide(self.player,self.mobs,False)
+        if mob_hits:
+            self.playing = False
+
         #check if player a platform - only if its falling
         if self.player.vel.y > 0:
             hits= pg.sprite.spritecollide(self.player,self.platforms,False)
@@ -78,9 +95,12 @@ class Game:
                         self.player.jumping =False
 
         
-        #if player reaches the top 3/4 of the screen
+        #if player reaches the top 3/4 of the screen 
+        # plat/mob remains behind
         if self.player.rect.top<=HEIGHT/4:
             self.player.pos.y += max(abs(self.player.vel.y),2)
+            for mob in self.mobs:
+                mob.rect.y += max(abs(self.player.vel.y),2)
             for plat in self.platforms:
                 plat.rect.y += max(abs(self.player.vel.y),2)
                 if plat.rect.top >= HEIGHT:
@@ -91,6 +111,7 @@ class Game:
         pow_hits = pg.sprite.spritecollide(self.player,self.powerups, True)
         for pow in pow_hits:
             if pow.type == 'boost':
+                self.boost_sound.play()
                 self.player.vel.y = -BOOST_POWER
                 self.player.jumping = False
 
@@ -129,13 +150,14 @@ class Game:
     def draw(self):
         self.screen.fill(BGCOLOR)
         self.all_sprites.draw(self.screen)
-        self.screen.blit(self.player.image, self.player.rect)
+        #self.screen.blit(self.player.image, self.player.rect) # since we use LayerredUpdate we dont need to blit them individually
         self.draw_text(str(self.score),22,WHITE,WIDTH/2,15)
         pg.display.flip()
         
 
     def show_start_screen(self):
         pg.mixer.music.load(path.join(self.snd_dir, 'Yippee.wav'))
+        pg.mixer.music.set_volume(0.1)
         pg.mixer.music.play(loops=-1)
         self.screen.fill(BGCOLOR)
         self.draw_text(TITLE,48,WHITE,WIDTH/2,HEIGHT/4)

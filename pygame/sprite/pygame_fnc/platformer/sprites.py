@@ -1,4 +1,5 @@
 
+from pygame.sprite.pygame_fnc.platformer.settings import PLATFORM_LAYER, PLAYER_LAYER
 from settings import PLAYER_JUMP
 from random import choice, randrange
 import pygame as pg
@@ -19,7 +20,10 @@ class Spritesheet:
 
 class Player(pg.sprite.Sprite):
     def __init__(self, game):
+        # this need to go before sprite is initialised
         self.groups = game.all_sprites
+        self._layer =PLAYER_LAYER
+        #sprite init
         pg.sprite.Sprite.__init__(self, self.groups)
         self.game = game
         self.walking =False
@@ -121,10 +125,12 @@ class Player(pg.sprite.Sprite):
 class Platform(pg.sprite.Sprite):
     def __init__(self,game, x,y):
         self.groups =game.all_sprites, game.platforms
+        self._layer =PLATFORM_LAYER
+
         pg.sprite.Sprite.__init__(self, self.groups)
         self.game = game
         images=[self.game.spritesheet.get_image(0,288,380,94),
-                self.game.spritesheet.get_image(213,1663,201,100)
+                self.game.spritesheet.get_image(213,1662,201,100)
                 ]
         self.image = choice(images)
         self.image.set_colorkey(BLACK)
@@ -137,11 +143,12 @@ class Platform(pg.sprite.Sprite):
 class Pow(pg.sprite.Sprite):
     def __init__(self,game, plat):
         self.groups = game.all_sprites, game.powerups
+        self._layer =POW_LAYER
         pg.sprite.Sprite.__init__(self, self.groups)
         self.game = game
         self.plat = plat
         self.type =choice(['boost'])
-        self.image = self.game.spritesheet.get_image(820,1850,71,70)
+        self.image = self.game.spritesheet.get_image(820,1805,71,70)
         self.image.set_colorkey(BLACK)
         self.rect = self.image.get_rect()
         self.rect.centerx =self.plat.rect.centerx
@@ -150,4 +157,43 @@ class Pow(pg.sprite.Sprite):
     def update(self):
         self.rect.bottom =self.plat.rect.top-5
         if not self.game.platforms.has(self.plat):
+            self.kill()
+
+class Mob(pg.sprite.Sprite):
+    def __init__(self,game):
+        self.groups = game.all_sprites, game.mobs
+        self._layer =MOB_LAYER
+        pg.sprite.Sprite.__init__(self, self.groups)
+        self.game = game
+        self.image_up = self.game.spritesheet.get_image(566,510,122,139)
+        self.image_up.set_colorkey(BLACK)
+        self.image_down = self.game.spritesheet.get_image(568,1534,122,135)
+        self.image_down.set_colorkey(BLACK)
+        self.image = self.image_up
+        self.rect = self.image.get_rect()
+        # x locaction to spawn: left or right of screen
+        self.rect.centerx = choice([-100,WIDTH+100]) 
+        self.vx = randrange(1,4)    #random speed
+        if self.rect.centerx > WIDTH:
+            self.vx *=-1    # if spawn on the left change direction of motion
+        # y location to spawn: top half of screen
+        self.rect.y = randrange(HEIGHT/2)  
+        self.vy = 0            # speed in y starting at zero
+        self.dy =0.5   #curv of speed-slow down at the top of ascending
+        
+    def update(self):
+        self.rect.x += self.vx
+        self.vy += self.dy
+        if self.vy > 3 or self.vy < -3:
+            self.dy *= -1   #descend/ascend revert directin
+        center = self.rect.center
+        if self.dy < 0:   # we move upwards
+            self.image = self.image_up
+        else:
+            self.image = self.image_down
+        
+        self.rect = self.image.get_rect()
+        self.rect.center = center
+        self.rect.y += self.vy
+        if self.rect.left >WIDTH +100 or self.rect.right <-100:
             self.kill()
