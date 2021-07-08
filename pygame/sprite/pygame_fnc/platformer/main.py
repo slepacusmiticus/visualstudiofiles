@@ -20,14 +20,18 @@ class Game:
     def load_data(self):
         #load highscore
         self.dir = path.dirname(__file__)
-        img_dir = path.join(self.dir, "img")
+        self.img_dir = path.join(self.dir, "img")
         with open(path.join(self.dir, HS_FILE),'r') as f:
             try:
                 self.highscore = int(f.read())
             except:
                 self.highscore = 0
         #load spreadsheet img
-        self.spritesheet = Spritesheet(path.join(img_dir, SPRITESHEET))
+        self.spritesheet = Spritesheet(path.join(self.img_dir, SPRITESHEET))
+        #load clouds
+        self.cloud_images =[]
+        for i in range(1,4):
+            self.cloud_images.append(pg.image.load(path.join(self.img_dir, 'cloud{}.png'.format(i))).convert())
         #load sounds
         self.snd_dir = path.join(self.dir, 'snd')
         self.jump_sound = pg.mixer.Sound(path.join(self.snd_dir, 'SFX_Jump_05.wav'))
@@ -42,6 +46,7 @@ class Game:
                                                         # allows to specify order in which sprites are drwn to the screen
         self.platforms= pg.sprite.Group()
         self.powerups =pg.sprite.Group()
+        self.clouds =pg.sprite.Group()
         self.mobs=pg.sprite.Group()
         self.player = Player(self)
        
@@ -50,6 +55,9 @@ class Game:
         self.mob_timer = 0  
         self.mus=pg.mixer.music.load(path.join(self.snd_dir, 'happytune.wav'))
         pg.mixer.music.set_volume(0.1)
+        for i in range(8):
+            c = Cloud(self)
+            c.rect.y += 500
         self.run()
     
     def run(self):
@@ -86,8 +94,8 @@ class Game:
                 for hit in hits:
                     if hit.rect.bottom >lowest.rect.bottom:
                         lowest=hit
-                if self.player.pos.x<lowest.rect.right +10 and \
-                    self.player.pos.x>lowest.rect.left-10:
+                if self.player.pos.x<lowest.rect.right + 10 and \
+                    self.player.pos.x>lowest.rect.left - 10:
 
                     if self.player.pos.y<lowest.rect.centery:
                         self.player.pos.y =lowest.rect.top
@@ -95,12 +103,18 @@ class Game:
                         self.player.jumping =False
 
         
-        #if player reaches the top 3/4 of the screen 
+        #if player reaches the top 1/4 of the screen 
         # plat/mob remains behind
         if self.player.rect.top<=HEIGHT/4:
+            if random.randrange(100)<15:
+                Cloud(self)
             self.player.pos.y += max(abs(self.player.vel.y),2)
+            for cloud in self.clouds:
+                cloud.rect.y +=max(abs(self.player.vel.y/2),2)
+            
             for mob in self.mobs:
                 mob.rect.y += max(abs(self.player.vel.y),2)
+            
             for plat in self.platforms:
                 plat.rect.y += max(abs(self.player.vel.y),2)
                 if plat.rect.top >= HEIGHT:
