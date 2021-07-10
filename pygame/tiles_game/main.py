@@ -11,6 +11,7 @@ class Game:
         self.screen=pg.display.set_mode((WIDTH, HEIGHT))
         pg.display.set_caption(TITLE)
         self.clock =pg.time.Clock()
+        pg.key.set_repeat(500,100)
         self.load_data()
     
     def load_data(self):
@@ -19,7 +20,11 @@ class Game:
     def new(self):
         #start a new game
         self.all_sprites = pg.sprite.Group()
-        self.player=Player(self,0,0)
+        self.walls = pg.sprite.Group()
+        self.player=Player(self,10,10)
+        for x in range(10,20):
+            Wall(self,x,5)
+
     
     def run(self):
         #game loop
@@ -55,13 +60,18 @@ class Game:
             
         for event in pg.event.get():
             if event.type == pg.QUIT:
-                if self.playing:
-                    self.playing = False
-                self.running = False
+                self.quit()
             if event.type == pg.KEYDOWN:
                 if event.key == pg.K_SPACE:
                     self.quit()
-
+                if event.key == pg.K_LEFT:
+                    self.player.move(dx=-1)
+                if event.key == pg.K_RIGHT:
+                    self.player.move(dx=1)
+                if event.key == pg.K_UP:
+                    self.player.move(dy=-1)
+                if event.key == pg.K_DOWN:
+                    self.player.move(dy=1)
 
 
     def show_start_screen(self):
@@ -76,4 +86,4 @@ g.show_start_screen()
 while True:
     g.new()
     g.run()
-    pg.show_go_screen()
+    g.show_go_screen()
