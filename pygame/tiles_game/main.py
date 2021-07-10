@@ -12,6 +12,9 @@ class Game:
         pg.display.set_caption(TITLE)
         self.clock =pg.time.Clock()
         self.load_data()
+    
+    def load_data(self):
+        pass
 
     def new(self):
         #start a new game
@@ -36,11 +39,17 @@ class Game:
         #game loop update
         self.all_sprites.update()
 
+    def draw_grid(self):
+        for x in range(0, WIDTH, TILESIZE):
+            pg.draw.line(self.screen,LIGHTGRAY,(x,0),(x,HEIGHT))
+        for y in range(0, HEIGHT, TILESIZE):
+            pg.draw.line(self.screen,LIGHTGRAY,(0,y),(WIDTH,y))
+
     def draw(self):
         self.screen.fill(BGCOLOR)
+        self.draw_grid()
         self.all_sprites.draw(self.screen)
-        pg.display.flip()
-   
+        pg.display.flip() 
 
     def events(self):
             
@@ -58,13 +67,13 @@ class Game:
     def show_start_screen(self):
         pass
 
-    def show_gameover_screen(self):
+    def show_go_screen(self):
         pass
 
-
+#create the game object
 g=Game()
 g.show_start_screen()
-while g.running:
+while True:
     g.new()
-    g.show_gameover_screen()
-pg.quit()
+    g.run()
+    pg.show_go_screen()
