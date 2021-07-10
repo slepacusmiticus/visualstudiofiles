@@ -19,7 +19,7 @@ class Game:
     def new(self):
         #start a new game
         self.all_sprites = pg.sprite.Group()
-        
+        self.player=Player(self,0,0)
     
     def run(self):
         #game loop
