@@ -7,3 +7,5 @@ images/
 platformer/__pycache__/
 .gitignore
 temp.py
+pygame/tiles_game/__pycache__/settings.cpython-39.pyc
+pygame/tiles_game/__pycache__/sprites.cpython-39.pyc
