@@ -41,7 +41,7 @@ class Game:
         
         self.playing=True
         while self.playing:
-            self.clock.tick(FPS) /1000
+            self.dt= self.clock.tick(FPS) /1000
             self.events()
             self.update()
             self.draw()
@@ -74,14 +74,6 @@ class Game:
             if event.type == pg.KEYDOWN:
                 if event.key == pg.K_SPACE:
                     self.quit()
-                if event.key == pg.K_LEFT:
-                    self.player.move(dx=-1)
-                if event.key == pg.K_RIGHT:
-                    self.player.move(dx=1)
-                if event.key == pg.K_UP:
-                    self.player.move(dy=-1)
-                if event.key == pg.K_DOWN:
-                    self.player.move(dy=1)
 
 
     def show_start_screen(self):
