@@ -3,10 +3,14 @@ from os import path
 from settings import *
 
 
+def collide_hit_rect(one, two):
+    return one.hit_rect.colliderect(two.rect)
+
+
 class Map:
     def __init__(self,filename):
         self.data =[]
-        with open(path.join(filename), 'rt')as f:
+        with open(filename, 'rt')as f:
             for line in f:
                 self.data.append(line.strip())
         self.tilewidth = len(self.data[0])
@@ -24,8 +28,8 @@ class Camera:
         return entity.rect.move(self.camera.topleft)
 
     def update(self,target):
-        x = -target.rect.x +(int(WIDTH/2))
-        y = -target.rect.y +(int(HEIGHT/2))
+        x = -target.rect.centerx +(int(WIDTH/2))
+        y = -target.rect.centery +(int(HEIGHT/2))
 
         # limit scrolling to map size
         x= min(0,x)  # left

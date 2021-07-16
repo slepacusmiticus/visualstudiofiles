@@ -1,3 +1,4 @@
+import pygame as pg
 WIDTH = 1024
 HEIGHT =768
 FPS =60
@@ -21,4 +22,6 @@ GRIDHEIGHT = HEIGHT / TILESIZE
 
 #player settings
 PLAYER_SPEED = 350
+PLAYER_ROT_SPEED = 250
 PLAYER_IMG = 'manBlue_gun.png'
+PLAYER_HIT_RECT= pg.Rect(0,0,35,35)
