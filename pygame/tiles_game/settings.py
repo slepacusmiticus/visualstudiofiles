@@ -17,7 +17,7 @@ YELLOW =(255,255,0)
 LIGHTGRAY=(100,100,100)
 DARKGRAY=(40,40,40)
 BROWN =(106,55,5)
-
+CYAN = (0,255,255)
 BGCOLOR = BROWN
 
 
@@ -35,9 +35,7 @@ PLAYER_ROT_SPEED = 250
 PLAYER_IMG = 'manBlue_gun.png'
 PLAYER_HIT_RECT= pg.Rect(0,0,35,35)
 BARREL_OFFSET = vec(30,10)
-KICK_BACK =  200  #recul
-GUN_SPREEAD = 5     #inaccuracy of the bullet
-BULLET_DAMAGE=10
+
 
 
 #gun settings
@@ -46,7 +44,9 @@ BULLET_SPEED=500
 BULLET_LIFETIME=1000
 BULLET_RATE =150
 BULLET_DAMAGE=10
-
+KICK_BACK =  200  #recul
+GUN_SPREEAD = 5     #inaccuracy of the bullet
+BULLET_DAMAGE=10
 
 #mob settings
 MOB_IMG = 'zombie1_hold.png'
