@@ -1,6 +1,6 @@
 from tile_map import collide_hit_rect
 import pygame as pg
-from random import uniform
+from random import uniform, choice
 from settings import *
 vec =pg.math.Vector2
 
@@ -91,6 +91,7 @@ class Mob(pg.sprite.Sprite):
         self.rect.center = self.pos
         self.rot= 0
         self.health = MOB_HEALTH
+        self.speed = choice(MOB_SPEEDS)
     
     def avoid_mobs(self):
         for mob in self.game.mobs:
@@ -107,7 +108,7 @@ class Mob(pg.sprite.Sprite):
         self.rect.center = self.pos
         self.acc = vec(1,0).rotate(-self.rot)
         self.avoid_mobs()
-        self.acc.scale_to_length(MOB_SPEED)
+        self.acc.scale_to_length(self.speed)
         self.acc += self.vel * -1
         self.vel += self.acc * self.game.dt
         self.pos +=self.vel *self.game.dt + 0.5 *self.acc * self.game.dt **2
